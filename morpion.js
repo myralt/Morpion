@@ -13,4 +13,10 @@ playBtn.addEventListener("click", (event) => {
 function applyEvents(event) {
   const target = event.explicitOriginalTarget;
   target.innerHTML = "O";
+
+  fetch("http://127.0.0.1:8080")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => console.log(data));
 }
