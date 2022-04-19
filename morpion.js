@@ -1,6 +1,8 @@
 let playerPawns = [];
 let computerPawns = [];
-const gameBoard = 64;
+let winner;
+const gameBoard = document.getElementById("game-board");
+const maxGridSpace = 64;
 const allCells = document.querySelectorAll("td > div");
 const playBtn = document.getElementById("play");
 const restartBtn = document.getElementById("restart");
@@ -18,16 +20,19 @@ function PlayerAction(event) {
   const target = event.explicitOriginalTarget;
   target.innerHTML = "O";
   playerPawns.push(target);
+  //const position = the grid coordinates as object
   console.log("clicked");
-  VerifySpace();
+  VerifyBoard();
+  //ComputerAction(position);
 }
 
-function ComputerAction() {
+function ComputerAction(playerPosition) {
   fetch("http://127.0.0.1:8080")
     .then((response) => {
       return response.json();
     })
     .then((data) => console.log(data));
+  //VerifyBoard();
 }
 
 function Restart() {
@@ -42,11 +47,16 @@ function Restart() {
   playBtn.removeAttribute("disabled");
 }
 
-function VerifySpace() {
-  if (playerPawns.length + computerPawns.length === 64) {
-    console.log("Game over, no space left!");
+function VerifyBoard() {
+  if (playerPawns.length + computerPawns.length === maxGridSpace || winner) {
     allCells.forEach((cell) => {
       cell.removeEventListener("click", PlayerAction);
     });
+    if (winner) {
+      console.log("We have a winner !");
+      return 0;
+    }
+    console.log("Game over, no space left!");
+    return 1;
   }
 }
