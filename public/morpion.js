@@ -43,18 +43,17 @@ function PlayerAction(event) {
 }
 
 // Queries AI for next optimal move and sets tile accordingly:
-function ComputerAction(playerPosition) {
-  fetch("http://127.0.0.1:8080/challenge", {
+async function ComputerAction(playerPosition) {
+  const serverData = await fetch("http://127.0.0.1:8080/challenge", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(playerPosition),
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => console.log(data));
+  }).then((response) => {
+    return response.json();
+  });
+  console.log(serverData);
   //VerifyBoard();
 }
 

@@ -17,8 +17,8 @@ const toClient = async (request, response) => {
   const clientData = Buffer.concat(buffers).toString();
   const data = JSON.parse(clientData);
   const playerPosition = {
-    x: data.x,
-    y: data.y,
+    x: data.x + 1,
+    y: data.y + 1,
   };
   response.writeHead(200, {
     "Content-Type": "application/json",
