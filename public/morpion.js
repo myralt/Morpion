@@ -38,7 +38,6 @@ function PlayerAction(event) {
     x: x.cellIndex,
     y: y.rowIndex,
   };
-  console.log(position);
   VerifyBoard();
   //ComputerAction(position);
 }
