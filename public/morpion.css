@@ -98,7 +98,7 @@ td {
 }
 
 td > div {
-  background-color: rgb(21, 15, 15);
+  background-color: rgba(21, 15, 15, 0.808);
   border: 5px transparent solid;
   height: 50px;
   width: 50px;
@@ -106,6 +106,7 @@ td > div {
 
 .x {
   background-color: palevioletred;
+  text-transform: uppercase;
   font-weight: 600;
   color: white;
   font-size: 2em;
@@ -114,6 +115,7 @@ td > div {
 
 .o {
   background-color: rgb(26, 26, 110);
+  text-transform: uppercase;
   font-weight: 600;
   color: white;
   font-size: 2em;
