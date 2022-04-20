@@ -28,7 +28,8 @@ playBtn.addEventListener("click", (event) => {
 
 // Sets tile at corresponding location and memorises it:
 function PlayerAction(event) {
-  const target = event.explicitOriginalTarget;
+  console.log(event);
+  const target = event.target;
   target.textContent = "o";
   target.setAttribute("class", "o");
   playerTiles.push(target);
@@ -39,16 +40,20 @@ function PlayerAction(event) {
     y: y.rowIndex,
   };
   VerifyBoard();
-  //ComputerAction(position);
+  ComputerAction(position);
 }
 
 // Queries AI for next optimal move and sets tile accordingly:
 function ComputerAction(playerPosition) {
-  fetch("http://127.0.0.1:8080")
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => console.log(data));
+  fetch("http://127.0.0.1:8080", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(playerPosition),
+  }).then((response) => {
+    console.log(response);
+  });
   //VerifyBoard();
 }
 
