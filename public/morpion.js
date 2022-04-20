@@ -54,6 +54,16 @@ async function ComputerAction(playerPosition) {
     return response.json();
   });
   console.log(serverData);
+  const y = gameBoard.rows[serverData.y];
+  const x = y.children[serverData.x];
+  console.log(y);
+  console.log(x);
+  const move = x.firstChild;
+  console.log(move);
+  move.textContent = "x";
+  move.setAttribute("class", "x");
+  computerTiles.push(move);
+  console.log(computerTiles);
   //VerifyBoard();
 }
 
