@@ -5,14 +5,14 @@ const cors = require("cors");
 
 //Initialises empty game board:
 let gameBoard = [
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
 ];
 
 // Instantiates web api:
@@ -42,14 +42,15 @@ const toClient = async (request, response) => {
   gameBoard[playerPosition.y][playerPosition.x] = "o";
 
   // Scans board to determine next move and returns results as object:
-  //const result = scanBoard(gameBoard);
-  const result = playerPosition;
+  const result = scanBoard(gameBoard);
+  gameBoard[result.y][result.x] = "x";
+  //const result = playerPosition;
 
   // Sends object to client:
   response.writeHead(200, {
     "Content-Type": "application/json",
   });
-  response.send(JSON.stringify(result));
+  response.end(JSON.stringify(result));
 };
 
 // Starts server to listen for http requests at port 8080:
@@ -73,11 +74,11 @@ function scanBoard(board) {
     return result;
   }
   for (const row of board) {
-    for (const col of board) {
-      if (board[row][col] === " ") {
-        board[row][col] = "o";
+    for (let col of row) {
+      if (col === ".") {
+        col = "x";
         let moveValue = RunSimulation(board, 0, false);
-        board[row][col] = " ";
+        col = ".";
         if (moveValue > bestMoveValue) {
           result.y = row;
           result.x = col;
@@ -93,24 +94,24 @@ function isWinner(board) {
   let player = "o";
   let computer = "x";
 
-  for (const row of board) {
-    for (const col of row) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
       // Checks if 3 tiles align vertically:
-      if (VerticalCheck(board, player, col, row)) {
+      if (VerticalCheck(board, player, j, i)) {
         return player;
-      } else if (VerticalCheck(board, computer, col, row)) {
+      } else if (VerticalCheck(board, computer, j, i)) {
         return computer;
       }
       // Checks if 3 tiles align horizontally:
-      if (HorizontalCheck(board, player, col, row)) {
+      if (HorizontalCheck(board, player, j, i)) {
         return player;
-      } else if (HorizontalCheck(board, computer, col, row)) {
+      } else if (HorizontalCheck(board, computer, j, i)) {
         return computer;
       }
       // Checks if 3 tiles align diagonally:
-      if (DiagonalCheck(board, player, col, row)) {
+      if (DiagonalCheck(board, player, j, i)) {
         return player;
-      } else if (DiagonalCheck(board, computer, col, row)) {
+      } else if (DiagonalCheck(board, computer, j, i)) {
         return computer;
       }
     }
@@ -155,7 +156,7 @@ function DiagonalCheck(board, tile, col, row) {
       return true;
     }
   }
-  if (row < 6 && col < 6) {
+  if (row > 2 && row < 6 && col > 2 && col < 6) {
     if (board[row - 1][col + 1] === tile && board[row - 2][col + 2] === tile) {
       return true;
     }
@@ -173,83 +174,57 @@ function DiagonalCheck(board, tile, col, row) {
   }
 }
 
-function RunSimulation(board, depth, isMax) {}
-
-// let score = evaluate(board);
-
-//     // If Maximizer has won the game
-//     // return his/her evaluated score
-//     if (score == 10)
-//         return score;
-
-//     // If Minimizer has won the game
-//     // return his/her evaluated score
-//     if (score == -10)
-//         return score;
-
-//     // If there are no more moves and
-//     // no winner then it is a tie
-//     if (isMovesLeft(board) == false)
-//         return 0;
-
-//     // If this maximizer's move
-//     if (isMax)
-//     {
-//         let best = -1000;
-
-//         // Traverse all cells
-//         for(let i = 0; i < 3; i++)
-//         {
-//             for(let j = 0; j < 3; j++)
-//             {
-
-//                 // Check if cell is empty
-//                 if (board[i][j]=='_')
-//                 {
-
-//                     // Make the move
-//                     board[i][j] = player;
-
-//                     // Call minimax recursively
-//                     // and choose the maximum value
-//                     best = Math.max(best, minimax(board,
-//                                     depth + 1, !isMax));
-
-//                     // Undo the move
-//                     board[i][j] = '_';
-//                 }
-//             }
-//         }
-//         return best;
-//     }
-
-//     // If this minimizer's move
-//     else
-//     {
-//         let best = 1000;
-
-//         // Traverse all cells
-//         for(let i = 0; i < 3; i++)
-//         {
-//             for(let j = 0; j < 3; j++)
-//             {
-
-//                 // Check if cell is empty
-//                 if (board[i][j] == '_')
-//                 {
-
-//                     // Make the move
-//                     board[i][j] = opponent;
-
-//                     // Call minimax recursively and
-//                     // choose the minimum value
-//                     best = Math.min(best, minimax(board,
-//                                     depth + 1, !isMax));
-
-//                     // Undo the move
-//                     board[i][j] = '_';
-//                 }
-//             }
-//         }
-//         return best;
-//     }
+function RunSimulation(board, depth, isMax) {
+  let winner = isWinner(board);
+  let noSpace;
+  if (winner === "o") return -10;
+  if (winner === "x") return 10;
+  for (const row of board) {
+    for (const col of row) {
+      if (col == ".") noSpace = false;
+    }
+  }
+  if (noSpace) return 0;
+  // The MiniMax AI algorithm, implemented in javascript, credit to creator of MiniMax:
+  if (isMax) {
+    let bestMoveValue = -1000;
+    for (const row of board) {
+      for (let col of row) {
+        // Check if cell is empty
+        if (col === ".") {
+          // Make the move
+          col = "x";
+          // Call minimax recursively
+          // and choose the maximum value
+          bestMoveValue = Math.max(
+            bestMoveValue,
+            RunSimulation(board, depth + 1, !isMax)
+          );
+          // Undo the move
+          col = ".";
+        }
+      }
+    }
+    return bestMoveValue;
+  } else {
+    let bestMoveValue = 1000;
+    for (const row of board) {
+      for (let col of row) {
+        // Check if cell is empty
+        if (col === ".") {
+          // Make the move
+          col = "o";
+          // Call minimax recursively and
+          // choose the minimum value
+          bestMoveValue = Math.min(
+            bestMoveValue,
+            RunSimulation(board, depth + 1, !isMax)
+          );
+          // Undo the move
+          col = ".";
+        }
+      }
+    }
+    return bestMoveValue;
+  }
+}
