@@ -42,7 +42,8 @@ const toClient = async (request, response) => {
   gameBoard[playerPosition.y][playerPosition.x] = "o";
 
   // Scans board to determine next move and returns results as object:
-  const result = scanBoard(gameBoard);
+  //const result = scanBoard(gameBoard);
+  const result = playerPosition;
 
   // Sends object to client:
   response.writeHead(200, {
