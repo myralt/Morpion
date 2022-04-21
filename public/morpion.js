@@ -44,6 +44,7 @@ function PlayerAction(event) {
 
 // Queries AI for next optimal move and sets tile accordingly:
 async function ComputerAction(playerPosition) {
+  // Waits for server response:
   const serverData = await fetch("http://127.0.0.1:8080/challenge", {
     method: "POST",
     headers: {
@@ -53,18 +54,25 @@ async function ComputerAction(playerPosition) {
   }).then((response) => {
     return response.json();
   });
-  console.log(serverData);
+
+  // Checks if there's a winner this turn:
+  if (serverData.winner === "o") {
+    winner = "player";
+  } else if (serverData.winner === "x") {
+    winner = "computer";
+  }
+
+  // Uses position provided to select slot:
   const y = gameBoard.rows[serverData.y];
   const x = y.children[serverData.x];
-  console.log(y);
-  console.log(x);
+
+  // Stores and styles html element:
   const move = x.firstChild;
-  console.log(move);
   move.textContent = "x";
   move.setAttribute("class", "x");
   computerTiles.push(move);
-  console.log(computerTiles);
-  //VerifyBoard();
+
+  VerifyBoard();
 }
 
 // Removes all events and reinitialises game board and variables:
