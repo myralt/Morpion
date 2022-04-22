@@ -8,7 +8,7 @@ Le match s'arrête s'il n'y a plus de place sur la grille (égalité).
 
 Dans ce projet, l'utilisateur (joueur O) joue contre l'ordinateur (joueur X).
 
-**Etat du project** : en cours.
+**Etat du project** : Actuellement jouable entre 2 personnes physiques. L'AI n'est pas encore opérationnelle.
 
 **Langages et technologies utilisés** :
 
@@ -25,10 +25,10 @@ The game is over if there is no space left on the grid (a draw).
 
 In this project, the user (player O) plays against the computer (player X).
 
-**Project Status** : in progress.
+**Project Status** : Can currently be played by 2 human players. The AI is not yet functional.
 
 **Languages and Technologies** :
 
 - HTML5 and CSS3, no framework, for the user interface.
 - JavaScript for interactions and functionalities on both client and server side (NodeJS).
-- Objective would be to use Node to serve the starter static pages and the AI server side would interact with the client during the entire match (through Fetch).
+- Objective would be to use Node to serve the starter static pages and the AI server-side would interact with the client during the entire match (through Fetch).

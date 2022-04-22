@@ -34,16 +34,22 @@ const toClient = async (request, response) => {
   const clientData = Buffer.concat(buffers).toString();
   const data = JSON.parse(clientData);
 
-  // Stores player's latest move:
-  const playerPosition = {
-    x: data.x,
-    y: data.y,
+  // Stores players' latest move:
+  const player1Position = {
+    x: data.player1.x,
+    y: data.player1.y,
   };
-  gameBoard[playerPosition.y][playerPosition.x] = "o";
+  gameBoard[player1Position.y][player1Position.x] = "o";
+
+  const player2Position = {
+    x: data.player2.x,
+    y: data.player2.y,
+  };
+  gameBoard[player2Position.y][player2Position.x] = "x";
 
   // Scans board to determine next move and returns results as object:
   const result = scanBoard(gameBoard);
-  gameBoard[result.y][result.x] = "x";
+  // gameBoard[result.y][result.x] = "x";
   //const result = playerPosition;
 
   // Sends object to client:
@@ -64,29 +70,27 @@ api.listen(8080, () => {
 // All functions --------------------------------------------------
 
 function scanBoard(board) {
-  let bestMoveValue = -1000;
+  //let bestMoveValue = -1000;
   let result = {
-    x: -1,
-    y: -1,
     winner: isWinner(board),
   };
   if (result.winner) {
     return result;
   }
-  for (const row of board) {
-    for (let col of row) {
-      if (col === ".") {
-        col = "x";
-        let moveValue = RunSimulation(board, 0, false);
-        col = ".";
-        if (moveValue > bestMoveValue) {
-          result.y = row;
-          result.x = col;
-          bestMoveValue = moveValue;
-        }
-      }
-    }
-  }
+  // for (const row of board) {
+  //   for (let col of row) {
+  // if (col === ".") {
+  //   col = "x";
+  //   let moveValue = RunSimulation(board, 0, false);
+  //   col = ".";
+  //   if (moveValue > bestMoveValue) {
+  //     result.y = row;
+  //     result.x = col;
+  //     bestMoveValue = moveValue;
+  // }
+  // }
+  //   }
+  // }
   return result;
 }
 
