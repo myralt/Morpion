@@ -71,8 +71,10 @@ api.listen(8080, () => {
 
 function scanBoard(board) {
   //let bestMoveValue = -1000;
+  let player = "o";
+  let computer = "x";
   let result = {
-    winner: isWinner(board),
+    winner: isWinner(board, player) || isWinner(board, computer),
   };
   if (result.winner) {
     return result;
@@ -94,88 +96,62 @@ function scanBoard(board) {
   return result;
 }
 
-function isWinner(board) {
-  let player = "o";
-  let computer = "x";
+function isWinner(board, player) {
+  const maxHeight = board.length;
+  const maxWidth = board[0].length;
 
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board.length; j++) {
-      // Checks if 3 tiles align vertically:
-      if (VerticalCheck(board, player, j, i)) {
+  // Checks if 3 tiles align horizontally:
+  for (let i = 0; i < maxHeight - 3; i++) {
+    for (let j = 0; j < maxWidth; j++) {
+      if (
+        board[j][i] === player &&
+        board[j][i + 1] === player &&
+        board[j][i + 2] === player
+      ) {
         return player;
-      } else if (VerticalCheck(board, computer, j, i)) {
-        return computer;
-      }
-      // Checks if 3 tiles align horizontally:
-      if (HorizontalCheck(board, player, j, i)) {
-        return player;
-      } else if (HorizontalCheck(board, computer, j, i)) {
-        return computer;
-      }
-      // Checks if 3 tiles align diagonally:
-      if (DiagonalCheck(board, player, j, i)) {
-        return player;
-      } else if (DiagonalCheck(board, computer, j, i)) {
-        return computer;
       }
     }
   }
+
+  // Checks if 3 tiles align vertically:
+  for (let i = 0; i < maxWidth - 3; i++) {
+    for (let j = 0; j < maxHeight; j++) {
+      if (
+        board[i][j] === player &&
+        board[i + 1][j] === player &&
+        board[i + 2][j] === player
+      ) {
+        return player;
+      }
+    }
+  }
+
+  // Checks if 3 tiles align diagonally (ascending):
+  for (let i = 3; i < maxWidth; i++) {
+    for (let j = 0; j < maxHeight - 3; j++) {
+      if (
+        board[i][j] == player &&
+        board[i - 1][j + 1] == player &&
+        board[i - 2][j + 2] == player
+      )
+        return player;
+    }
+  }
+
+  // Checks if 3 tiles align diagonally (descending):
+  for (let i = 3; i < maxWidth; i++) {
+    for (let j = 3; j < maxHeight; j++) {
+      if (
+        board[i][j] == player &&
+        board[i - 1][j - 1] == player &&
+        board[i - 2][j - 2] == player
+      )
+        return player;
+    }
+  }
+
   // No winner:
-  return;
-}
-
-function VerticalCheck(board, tile, col, row) {
-  if (row >= 6) {
-    return false;
-  } else if (board[row + 1][col] === tile && board[row + 2][col] === tile) {
-    return true;
-  }
   return false;
-}
-
-function HorizontalCheck(board, tile, col, row) {
-  if (col < 7) {
-    if (board[row][col - 1] === tile && board[row][col + 1] === tile) {
-      return true;
-    }
-    if (col < 6) {
-      if (board[row][col + 1] === tile && board[row][col + 2] === tile) {
-        return true;
-      }
-    }
-    if (col > 1) {
-      if (board[row][col - 1] === tile && board[row][col - 2] === tile) {
-        return true;
-      }
-    }
-  }
-}
-
-function DiagonalCheck(board, tile, col, row) {
-  if (row > 1 && row < 6 && col > 1) {
-    if (board[row - 1][col - 1] === tile && board[row - 2][col - 2] === tile) {
-      return true;
-    }
-    if (board[row + 1][col - 1] === tile && board[row + 2][col - 2] === tile) {
-      return true;
-    }
-  }
-  if (row > 2 && row < 6 && col > 2 && col < 6) {
-    if (board[row - 1][col + 1] === tile && board[row - 2][col + 2] === tile) {
-      return true;
-    }
-    if (board[row + 1][col + 1] === tile && board[row + 2][col + 2] === tile) {
-      return true;
-    }
-  }
-  if (col > 0 && col < 7 && row < 7 && row > 0) {
-    if (board[row - 1][col + 1] === tile && board[row + 1][col - 1] === tile) {
-      return true;
-    }
-    if (board[row + 1][col + 1] === tile && board[row - 1][col - 1] === tile) {
-      return true;
-    }
-  }
 }
 
 function RunSimulation(board, depth, isMax) {
