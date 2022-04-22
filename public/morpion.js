@@ -87,9 +87,9 @@ async function ComputeAction(playerPosition) {
   console.log(serverData);
   // Checks if there's a winner this turn:
   if (serverData.winner === "o") {
-    winner = "player";
+    winner = "o";
   } else if (serverData.winner === "x") {
-    winner = "computer";
+    winner = "x";
   }
 
   // Uses position provided to select slot:
@@ -137,7 +137,7 @@ function VerifyBoard() {
       cell.removeEventListener("click", PlayerAction);
     });
     if (winner) {
-      console.log("We have a winner !");
+      console.log("Player " + winner + " has won the game !");
       return 0;
     }
     console.log("Game over, no space left!");
